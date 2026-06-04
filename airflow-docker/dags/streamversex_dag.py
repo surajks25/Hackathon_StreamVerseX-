@@ -1,20 +1,16 @@
 from airflow import DAG
-from airflow.providers.standard.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
 from datetime import datetime
-
-
-def hello_streamversex():
-    print("StreamVerseX Airflow DAG is running!")
 
 
 with DAG(
     dag_id="streamversex_dag",
     start_date=datetime(2025, 1, 1),
-    schedule=None,
+    schedule="@daily",
     catchup=False,
 ) as dag:
 
-    hello_task = PythonOperator(
-        task_id="hello_task",
-        python_callable=hello_streamversex,
+    kafka_producer = BashOperator(
+        task_id="run_kafka_producer",
+        bash_command="python /opt/airflow/dags/kafka_producer.py",
     )

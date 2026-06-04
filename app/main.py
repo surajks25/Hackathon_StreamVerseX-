@@ -1,9 +1,24 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from app.database import engine
 
 app = FastAPI()
 
+# ---------------------------------
+# CORS
+# ---------------------------------
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # ---------------------------------
 # HOME
@@ -108,16 +123,102 @@ def buffering():
 
             result = conn.execute(
                 text("""
-                SELECT AVG(buffering_duration_ms)
+                SELECT AVG(latency)
                 FROM cdn_buffering_logs
                 """)
             )
 
-            buffering_avg = result.scalar()
+            avg_latency = result.scalar()
 
         return {
-            "average_buffering_ms":
-            round(buffering_avg, 2)
+            "average_latency": round(avg_latency, 2)
+        }
+
+    except Exception as e:
+        return {
+            "error": str(e)
+        }
+
+
+# ---------------------------------
+# TOTAL USERS
+# ---------------------------------
+
+@app.get("/users/count")
+def users_count():
+
+    try:
+        with engine.connect() as conn:
+
+            result = conn.execute(
+                text("""
+                SELECT COUNT(DISTINCT user_id)
+                FROM user_watch_history
+                """)
+            )
+
+            total_users = result.scalar()
+
+        return {
+            "total_users": total_users
+        }
+
+    except Exception as e:
+        return {
+            "error": str(e)
+        }
+
+
+# ---------------------------------
+# WATCH EVENTS
+# ---------------------------------
+
+@app.get("/watch-events/count")
+def watch_events():
+
+    try:
+        with engine.connect() as conn:
+
+            result = conn.execute(
+                text("""
+                SELECT COUNT(*)
+                FROM user_watch_history
+                """)
+            )
+
+            watch_events = result.scalar()
+
+        return {
+            "watch_events": watch_events
+        }
+
+    except Exception as e:
+        return {
+            "error": str(e)
+        }
+
+
+# ---------------------------------
+# SUBSCRIPTIONS COUNT
+# ---------------------------------
+
+@app.get("/subscriptions/count")
+def subscriptions_count():
+
+    try:
+        with engine.connect() as conn:
+
+            result = conn.execute(
+                text("""
+                SELECT COUNT(*)
+                FROM subscription_transactions
+                """)
+            )
+
+            subscriptions = result.scalar()
+
+        return {
+            "subscriptions": subscriptions
         }
 
     except Exception as e:
@@ -131,32 +232,32 @@ def buffering():
 # ---------------------------------
 
 @app.get("/trending")
-def trending_content():
+def trending():
 
     try:
+
+        query = """
+        SELECT content_category,
+               COUNT(*) AS total_views
+        FROM user_watch_history
+        GROUP BY content_category
+        ORDER BY total_views DESC
+        LIMIT 10
+        """
+
         with engine.connect() as conn:
 
-            result = conn.execute(
-                text("""
-                SELECT
-                    content_id,
-                    COUNT(*) AS total_views
-                FROM user_watch_history
-                GROUP BY content_id
-                ORDER BY total_views DESC
-                LIMIT 10
-                """)
-            )
+            result = conn.execute(text(query))
 
-            trending = []
+            data = []
 
             for row in result:
-                trending.append({
-                    "content_id": row[0],
+                data.append({
+                    "category": row[0],
                     "views": row[1]
                 })
 
-        return trending
+        return data
 
     except Exception as e:
         return {
@@ -216,9 +317,7 @@ def subscriptions():
             subscriptions = []
 
             for row in result:
-                subscriptions.append(
-                    dict(row._mapping)
-                )
+                subscriptions.append(dict(row._mapping))
 
         return subscriptions
 
@@ -249,9 +348,7 @@ def content():
             content_list = []
 
             for row in result:
-                content_list.append(
-                    dict(row._mapping)
-                )
+                content_list.append(dict(row._mapping))
 
         return content_list
 
@@ -282,9 +379,7 @@ def recommendations():
             recs = []
 
             for row in result:
-                recs.append(
-                    dict(row._mapping)
-                )
+                recs.append(dict(row._mapping))
 
         return recs
 
