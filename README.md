@@ -312,11 +312,11 @@ docker compose up --build
 
 Information Science & Engineering
 
-Machine Learning | Data Engineering | Backend Development
+Aspiring Data Scientist | Data Analyst | Gen AI Developer | ML Enthusiast | Building Intelligent Solutions with Data
 
-GitHub: https://github.com/your-github-username
+GitHub: https://github.com/surajks25
 
-LinkedIn: https://linkedin.com/in/your-linkedin
+LinkedIn: https://www.linkedin.com/in/surajks25/
 
 ---
 
