@@ -28,29 +28,29 @@ The project demonstrates an end-to-end real-time analytics pipeline using **Apac
 
 # 🎯 Problem Statement
 
-Modern OTT platforms continuously generate massive volumes of streaming events, including:
+Modern OTT platforms continuously generate millions of streaming events every day, including:
 
 - Video Streaming Sessions
 - Watch History
 - Subscription Transactions
-- Buffering Logs
+- CDN Buffering Logs
 - User Clickstream
 - Search Events
 - Recommendation Events
 - Content Metadata
 
-Processing and analyzing these events requires scalable real-time data engineering solutions.
+Processing these massive datasets requires scalable real-time data engineering pipelines capable of ingestion, storage, processing, and visualization.
 
-StreamVerseX demonstrates how such a platform can be built using modern open-source technologies.
+StreamVerseX demonstrates how this can be achieved using modern open-source technologies.
 
 ---
 
 # ✨ Features
 
-- Real-Time Event Streaming using Apache Kafka
-- Kafka Producer & Consumer
-- Enterprise PostgreSQL Data Warehouse
-- Star Schema Data Model
+- Real-Time Event Streaming with Apache Kafka
+- Kafka Producer & Consumer Pipeline
+- PostgreSQL Enterprise Data Warehouse
+- Star Schema Data Modeling
 - FastAPI REST APIs
 - Interactive React Dashboard
 - Executive Power BI Dashboards
@@ -60,51 +60,37 @@ StreamVerseX demonstrates how such a platform can be built using modern open-sou
 
 ---
 
-# 🏗️ Architecture
+# 🏗️ System Architecture
+
+<p align="center">
+<img src="images/architecture.png" width="95%">
+</p>
+
+---
+
+# 🔄 Data Flow
 
 ```text
-                           StreamVerseX Architecture
-
-         +----------------------+
-         |  CSV Streaming Data  |
-         +----------+-----------+
-                    |
-                    ▼
-         +----------------------+
-         |   Kafka Producer     |
-         | (Python Producer)    |
-         +----------+-----------+
-                    |
-                    ▼
-         +----------------------+
-         |    Apache Kafka      |
-         | Topic: stream-events |
-         +----------+-----------+
-                    |
-                    ▼
-         +----------------------+
-         |   Kafka Consumer     |
-         | (Python Consumer)    |
-         +----------+-----------+
-                    |
-                    ▼
-         +----------------------+
-         | PostgreSQL Database  |
-         | Data Warehouse       |
-         +------+---------+-----+
-                |         |
-                |         |
-                ▼         ▼
-      +---------------+   +----------------+
-      | FastAPI APIs  |   |    Power BI    |
-      | REST Backend  |   | Dashboards     |
-      +-------+-------+   +----------------+
-              |
-              ▼
-      +--------------------+
-      | React Dashboard    |
-      | Live Analytics     |
-      +--------------------+
+CSV Dataset
+      │
+      ▼
+Kafka Producer
+      │
+      ▼
+Apache Kafka (Topic: stream-events)
+      │
+      ▼
+Kafka Consumer
+      │
+      ▼
+PostgreSQL Data Warehouse
+      │
+ ┌────┴─────────────┐
+ ▼                  ▼
+FastAPI APIs     Power BI
+ │
+ ▼
+React Dashboard
 ```
 
 ---
@@ -117,7 +103,7 @@ StreamVerseX demonstrates how such a platform can be built using modern open-sou
 | Backend API | FastAPI |
 | Frontend | React + Vite |
 | Database | PostgreSQL 17 |
-| Real-Time Streaming | Apache Kafka |
+| Streaming | Apache Kafka |
 | Data Processing | Pandas |
 | Business Intelligence | Power BI |
 | Containerization | Docker |
@@ -142,12 +128,13 @@ StreamVerseX
 ├── react-frontend/
 │
 ├── images/
-│   ├── banner.png
+│   ├── bannerImage.png
 │   ├── architecture.png
 │   ├── reactFrontend.png
 │   ├── docker.png
 │   ├── kafkaProducer.png
 │   ├── kafkaConsumer.png
+│   ├── postgreSql.png
 │   ├── fastAPI.png
 │   ├── dashPage1.png
 │   ├── dashPage2.png
@@ -169,37 +156,10 @@ The project uses synthetic OTT datasets including:
 - Streaming Sessions
 - Watch History
 - Subscription Transactions
-- Buffering Logs
+- CDN Buffering Logs
 - Clickstream Events
 - Search Recommendation Logs
 - Content Metadata
-
----
-
-# 🔄 Data Flow
-
-```text
-CSV Dataset
-      │
-      ▼
-Kafka Producer
-      │
-      ▼
-Apache Kafka
-      │
-      ▼
-Kafka Consumer
-      │
-      ▼
-PostgreSQL Data Warehouse
-      │
- ┌────┴─────────────┐
- ▼                  ▼
-FastAPI         Power BI
- │
- ▼
-React Dashboard
-```
 
 ---
 
@@ -210,19 +170,19 @@ React Dashboard
 | / | Home |
 | /docs | Swagger Documentation |
 | /streaming/count | Streaming Sessions Count |
-| /streaming/live | Active Streaming Sessions |
+| /streaming/live | Live Streaming Sessions |
 | /streaming/buffering | Buffering Analytics |
-| /users/count | User Count |
-| /watch-events/count | Watch Events Count |
+| /users/count | Total Users |
+| /watch-events/count | Watch Events |
 | /subscriptions/count | Subscription Analytics |
 | /trending | Trending Content |
-| /watch-history | Watch History Analytics |
+| /watch-history | Watch History |
 
 ---
 
 # 🐳 Docker
 
-Run the complete application
+Run the entire project using Docker.
 
 ```bash
 docker compose up --build
@@ -262,6 +222,14 @@ docker compose up --build
 
 ---
 
+## PostgreSQL Database
+
+The Kafka Consumer continuously inserts streaming events into the PostgreSQL Data Warehouse, enabling real-time analytics and powering both the FastAPI backend and Power BI dashboards.
+
+![PostgreSQL](images/postgreSql.png)
+
+---
+
 ## Executive Power BI Dashboard
 
 ![Dashboard](images/dashPage1.png)
@@ -298,10 +266,10 @@ docker compose up --build
 
 - Apache Spark Streaming
 - Kubernetes Deployment
-- CI/CD with GitHub Actions
+- GitHub Actions CI/CD
 - AWS Cloud Deployment
-- Recommendation Engine using Machine Learning
-- Authentication & Authorization
+- Machine Learning Recommendation Engine
+- JWT Authentication
 - Role-Based Access Control
 
 ---
@@ -310,18 +278,19 @@ docker compose up --build
 
 ## Suraj K S
 
-Information Science & Engineering
+**Information Science & Engineering**
 
-Aspiring Data Scientist | Data Analyst | Gen AI Developer | ML Enthusiast | Building Intelligent Solutions with Data
+Aspiring **Data Scientist | Data Analyst | Data Engineer | Gen AI Developer | Machine Learning Enthusiast**
 
-GitHub: https://github.com/surajks25
+### Connect with me
 
-LinkedIn: https://www.linkedin.com/in/surajks25/
+- GitHub: https://github.com/surajks25
+- LinkedIn: https://www.linkedin.com/in/surajks25/
 
 ---
 
 # ⭐ Support
 
-If you found this project useful, consider giving it a ⭐ on GitHub.
+If you found this project useful, please consider giving it a ⭐ on GitHub.
 
-It motivates me to build more enterprise-level data engineering and analytics projects.
+Your support motivates me to build more enterprise-level Data Engineering, Analytics, and AI projects.
